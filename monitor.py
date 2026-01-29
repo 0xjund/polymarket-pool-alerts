@@ -1,7 +1,7 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict
 from database import get_previous_snapshot
 
-def detect_change(markets: List[Dict], threshold_percent: float = 50.0) -> List[Dict]
+def detect_change(markets: List[Dict], threshold_percent: float = 50.0) -> List[Dict]:
     """
     Detect significant changes in the market
 
@@ -86,4 +86,49 @@ def detect_change(markets: List[Dict], threshold_percent: float = 50.0) -> List[
                             'previous_timestamp': previous['timestamp']
                               })
 
-return alerts
+    return alerts
+
+def format_alert_message(alert: Dict) -> str:
+    """ Format an alert """
+
+    if alert['type'] == 'new_market':
+        return f"""
+🆕 NEW MARKET
+{alert['title']}
+
+💰 Initial Liquidity: ${alert['current_liquidity']:,.2f}
+📊 Initial Volume: ${alert['current_volume']:,.2f}
+"""
+
+    elif alert['type'] == 'liquidity_change':
+        emoji = "📈" if alert ['change_percent'] > 0 else "📉"
+        direction = "increased" if alert ['change_percent'] > 0 else "decreased"
+
+        return f"""
+{emoji} LIQUIDITY ALERT
+{alert['title']}
+
+Liquidity {direction} by {abs(alert['change_percent']):.1f}%
+Before: ${alert['previous_liquidity']:,.2f}
+Now: ${alert['current_liquidity']:,.2f}
+Change: ${alert['current_liquidity'] - alert['previous_liquidity']:,.2f}
+"""
+    return "Unknown alert type"
+
+if __name__ == "__main__":
+    # Test with dummy data 
+    test_alerts = [{
+        'market_id': '12345',
+        'type': 'liquidity_change',
+        'title': 'Will trump win 2024',
+        'change_percent': 75.5,
+        'previous_liquidity': 10000,
+        'current_liquidity': 17550,
+        'previous_timestamp': '2025-01-29T10:00:00'                   
+        }
+    ]
+
+    for alert in test_alerts:
+        print(f"Alert type: {alert['type']}")
+        print(format_alert_message(alert))
+
