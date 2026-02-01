@@ -1,7 +1,6 @@
 import os
 import requests
 from dotenv import load_dotenv
-from typing import Dict
 
 # Load bot token
 load_dotenv()
@@ -35,8 +34,8 @@ def send_telegram_alert(message: str) -> bool:
 
 if __name__ == "__main__":
     # Test the alert
-        test_message = """
-📈 TEST ALERT
-This is a test from your Polymarket bot!
-"""
-send_telegram_alert(test_message)
+     #   test_message = """
+#📈 TEST ALERT
+#This is a test from your Polymarket bot!
+#"""
+    send_telegram_alert()

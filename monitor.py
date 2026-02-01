@@ -1,7 +1,7 @@
 from typing import List, Dict
 from database import get_previous_snapshot
 
-def detect_change(markets: List[Dict], threshold_percent: float = 50.0) -> List[Dict]:
+def detect_changes(markets: List[Dict], threshold_percent: float = 50.0) -> List[Dict]:
     """
     Detect significant changes in the market
 
@@ -24,7 +24,7 @@ def detect_change(markets: List[Dict], threshold_percent: float = 50.0) -> List[
         # Get previous snapshot from db
         previous = get_previous_snapshot(market_id)
 
-        if not previous:
+        if previous is None:
             # First time seeing the market and no previous data is available
             #  Show new markets with high liquidity
             if current_liquidity > 50000: # New market with > 50k liquidity 
@@ -35,15 +35,15 @@ def detect_change(markets: List[Dict], threshold_percent: float = 50.0) -> List[
                                   'current_liquidity': current_liquidity,
                                   'current_volume': current_volume
                               })
-                continue 
+            continue 
                         
     # Calculate changes
-    prev_liqudity = previous['liquidity']
-    prev_volume = previous['volume']
+        prev_liquidity = previous['liquidity']
+        prev_volume = previous['volume']
 
     # Avoid dividing by zero
-    if prev_liqudity > 0:
-        liquidity_change_pct = ((current_liquidity - prev_liqudity) / prev_liqudity) * 100
+    if prev_liquidity > 0:
+        liquidity_change_pct = ((current_liquidity - prev_liquidity) / prev_liquidity) * 100
     else:
         liquidity_change_pct = 0
 
@@ -58,7 +58,7 @@ def detect_change(markets: List[Dict], threshold_percent: float = 50.0) -> List[
                           'market_id': market_id,
                           'title': market.get('title', 'Unknown'),
                           'type': 'liquidity_change',
-                          'previous_liquidity': prev_liqudity,
+                          'previous_liquidity': prev_liquidity,
                           'current_liquidity': current_liquidity,
                           'change_percent': liquidity_change_pct,
                           'previous_timestamp': previous['timestamp']
