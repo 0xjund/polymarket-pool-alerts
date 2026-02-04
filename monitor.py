@@ -29,61 +29,61 @@ def detect_changes(markets: List[Dict], threshold_percent: float = 50.0) -> List
             #  Show new markets with high liquidity
             if current_liquidity > 50000: # New market with > 50k liquidity 
                 alerts.append({
-                                  'market_id': market_id,
-                                  'title': market.get('title', 'Unknown'),
-                                  'type': 'new market',
-                                  'current_liquidity': current_liquidity,
-                                  'current_volume': current_volume
+                                  'market_id':market_id,
+                                  'title':market.get('title','Unknown'),
+                                  'type':'new_market',
+                                  'current_liquidity':current_liquidity,
+                                  'current_volume':current_volume
                               })
             continue 
                         
-    # Calculate changes
+        # Calculate changes
         prev_liquidity = previous['liquidity']
         prev_volume = previous['volume']
 
     # Avoid dividing by zero
-    if prev_liquidity > 0:
-        liquidity_change_pct = ((current_liquidity - prev_liquidity) / prev_liquidity) * 100
-    else:
-        liquidity_change_pct = 0
+        if prev_liquidity > 0:
+            liquidity_change_pct = ((current_liquidity - prev_liquidity) / prev_liquidity) * 100
+        else:
+            liquidity_change_pct = 0
 
-    if prev_volume > 0:
-        volume_change_pct = ((current_volume - prev_volume) / prev_volume) * 100
-    else:
-        volume_change_pct = 0
+        if prev_volume > 0:
+            volume_change_pct = ((current_volume - prev_volume) / prev_volume) * 100
+        else:
+            volume_change_pct = 0
 
     # Check the changes to see if the exceeded the threshold
-    if abs(liquidity_change_pct) >= threshold_percent:
-        alerts.append({
-                          'market_id': market_id,
-                          'title': market.get('title', 'Unknown'),
-                          'type': 'liquidity_change',
-                          'previous_liquidity': prev_liquidity,
-                          'current_liquidity': current_liquidity,
-                          'change_percent': liquidity_change_pct,
-                          'previous_timestamp': previous['timestamp']
+        if abs(liquidity_change_pct) >= threshold_percent:
+            alerts.append({
+                          'market_id':market_id,
+                          'title':market.get('title', 'Unknown'),
+                          'type':'liquidity_change',
+                          'previous_liquidity':prev_liquidity,
+                          'current_liquidity':current_liquidity,
+                          'change_percent':liquidity_change_pct,
+                          'previous_timestamp':previous['timestamp']
                       })
 
-    if abs(volume_change_pct) >= threshold_percent:
-        alerts.append({
-                              'market_id': market_id,
-                              'title': market.get('title', 'Unknown'),
-                              'type': 'liquidity_change',
-                              'previous_liquidity': prev_liqudity,
-                              'current_liquidity': current_liquidity,
-                              'change_percent': liquidity_change_pct,
-                              'previous_timestamp': previous['timestamp']
+        if abs(volume_change_pct) >= threshold_percent:
+            alerts.append({
+                              'market_id':market_id,
+                              'title':market.get('title', 'Unknown'),
+                              'type':'liquidity_change',
+                              'previous_liquidity':prev_liquidity,
+                              'current_liquidity':current_liquidity,
+                              'change_percent':liquidity_change_pct,
+                              'previous_timestamp':previous['timestamp']
                           })
 
-    if abs(volume_change_pct) >= threshold_percent:
-        alerts.append({
-                            'market_id': market_id,
-                            'title': market.get('title', 'Unknown'),
-                            'type': 'volume_change',
-                            'previous_volume': prev_volume,
-                            'current_volume': current_volume,
-                            'change_percent': volume_change_pct,
-                            'previous_timestamp': previous['timestamp']
+        if abs(volume_change_pct) >= threshold_percent:
+            alerts.append({
+                            'market_id':market_id,
+                            'title':market.get('title', 'Unknown'),
+                            'type':'volume_change',
+                            'previous_volume':prev_volume,
+                            'current_volume':current_volume,
+                            'change_percent':volume_change_pct,
+                            'previous_timestamp':previous['timestamp']
                               })
 
     return alerts
@@ -114,21 +114,3 @@ Now: ${alert['current_liquidity']:,.2f}
 Change: ${alert['current_liquidity'] - alert['previous_liquidity']:,.2f}
 """
     return "Unknown alert type"
-
-if __name__ == "__main__":
-    # Test with dummy data 
-    test_alerts = [{
-        'market_id': '12345',
-        'type': 'liquidity_change',
-        'title': 'Will trump win 2024',
-        'change_percent': 75.5,
-        'previous_liquidity': 10000,
-        'current_liquidity': 17550,
-        'previous_timestamp': '2025-01-29T10:00:00'                   
-        }
-    ]
-
-    for alert in test_alerts:
-        print(f"Alert type: {alert['type']}")
-        print(format_alert_message(alert))
-

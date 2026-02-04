@@ -31,11 +31,3 @@ def send_telegram_alert(message: str) -> bool:
     except Exception as e:
         print(f"✗ Error sending Telegram message: {e}")
         return False
-
-if __name__ == "__main__":
-    # Test the alert
-     #   test_message = """
-#📈 TEST ALERT
-#This is a test from your Polymarket bot!
-#"""
-    send_telegram_alert()

@@ -76,7 +76,7 @@ def get_previous_snapshot(market_id: str) -> Optional[Dict]:
     if result:
         return {
             'volume': result[0],
-            'liquidty': result[1],
+            'liquidity': result[1],
             'timestamp': result[2]
         }
     return None
