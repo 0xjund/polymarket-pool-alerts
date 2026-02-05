@@ -181,9 +181,8 @@ uv run pytest -v
 
 - Working with REST APIs and pagination
 - SQLite for persistent data storage
-- Deploying to cloud infrastructure (Oracle Cloud)
+- Deploying to cloud infrastructure 
 - Setting up systemd services
-- Writing tests with pytest
 - Managing secrets with .env files
 
 ## Possible Future Improvements
